@@ -1,4 +1,5 @@
 import { Instagram, Linkedin, MapPin, Mail, Phone } from 'lucide-react'
+import { INSTAGRAM_URL, LINKEDIN_URL } from '@/lib/constants'
 
 export function Footer() {
   return (
@@ -68,7 +69,7 @@ export function Footer() {
           <h3 className="font-semibold text-lg mb-6 text-secondary">Redes Sociais</h3>
           <div className="flex gap-4">
             <a
-              href="https://instagram.com/abncontabil"
+              href={INSTAGRAM_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-secondary hover:text-[#052B3A] transition-all"
@@ -76,7 +77,7 @@ export function Footer() {
               <Instagram className="w-5 h-5" />
             </a>
             <a
-              href="https://linkedin.com/company/abncontabil"
+              href={LINKEDIN_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-secondary hover:text-[#052B3A] transition-all"
@@ -89,14 +90,6 @@ export function Footer() {
 
       <div className="container mx-auto px-4 pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-400">
         <p>&copy; {new Date().getFullYear()} ABN Contábil Ltda. Todos os direitos reservados.</p>
-        <div className="flex gap-4">
-          <a href="#" className="hover:text-white">
-            Termos de Uso
-          </a>
-          <a href="#" className="hover:text-white">
-            Política de Privacidade
-          </a>
-        </div>
       </div>
     </footer>
   )

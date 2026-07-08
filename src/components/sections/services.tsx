@@ -1,5 +1,6 @@
 import { Briefcase, Building, Calculator, ArrowRight } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { WHATSAPP_URL } from '@/lib/constants'
 
 const services = [
   {
@@ -70,7 +71,9 @@ export function Services() {
                   ))}
                 </ul>
                 <a
-                  href="#contato"
+                  href={WHATSAPP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center text-sm font-semibold text-primary group-hover:text-secondary transition-colors"
                 >
                   Quero saber mais{' '}

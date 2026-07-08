@@ -23,6 +23,15 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useToast } from '@/hooks/use-toast'
+import { insertLead } from '@/services/leads'
+import {
+  WHATSAPP_URL,
+  buildWhatsAppMessage,
+  COMPANY_EMAIL,
+  COMPANY_PHONE,
+  COMPANY_ADDRESS,
+  GOOGLE_MAPS_URL,
+} from '@/lib/constants'
 
 const formSchema = z.object({
   name: z.string().min(2, 'Nome deve ter pelo menos 2 caracteres'),
@@ -54,22 +63,36 @@ export function Contact() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true)
     try {
-      // Fake Supabase Submission
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      const { error } = await insertLead({
+        nome: values.name,
+        whatsapp: values.whatsapp,
+        email: values.email,
+        empresa: values.company,
+        regime: values.regime,
+        faturamento_mensal: values.revenue,
+        mensagem: values.message || null,
+      })
+
+      if (error) throw error
 
       toast({
         title: 'Solicitação enviada com sucesso!',
         description: 'Você será redirecionado para o nosso WhatsApp.',
       })
 
-      const messageText = `Olá, quero fazer um diagnóstico gratuito com a ABN Contábil.%0A%0A*Nome:* ${values.name}%0A*Empresa:* ${values.company}%0A*Regime:* ${values.regime}%0A*Faturamento:* ${values.revenue}${values.message ? `%0A*Mensagem:* ${values.message}` : ''}`
-      const waUrl = `https://api.whatsapp.com/send?phone=556135612665&text=${messageText}`
+      const waUrl = buildWhatsAppMessage({
+        nome: values.name,
+        empresa: values.company,
+        faturamento: values.revenue,
+        regime: values.regime,
+        mensagem: values.message,
+      })
 
       setTimeout(() => {
-        window.open(waUrl, '_blank')
+        window.open(waUrl, '_blank', 'noopener,noreferrer')
         form.reset()
       }, 1500)
-    } catch (error) {
+    } catch {
       toast({
         title: 'Erro ao enviar',
         description: 'Tente novamente ou nos chame diretamente no WhatsApp.',
@@ -109,18 +132,28 @@ export function Contact() {
           </div>
 
           <div className="mt-6 space-y-3 text-sm text-slate-600">
-            <div className="flex items-start gap-3">
+            <a
+              href={GOOGLE_MAPS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-start gap-3"
+            >
               <MapPin className="w-5 h-5 text-secondary shrink-0 mt-0.5" />
-              <span>C 11 Lote 3 a 5 Loja 4 - Taguatinga DF - Cep: 72.010-110</span>
-            </div>
-            <div className="flex items-center gap-3">
+              <span>{COMPANY_ADDRESS}</span>
+            </a>
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3"
+            >
               <Phone className="w-5 h-5 text-secondary shrink-0" />
-              <span>(61) 3561-2665</span>
-            </div>
-            <div className="flex items-center gap-3">
+              <span>{COMPANY_PHONE}</span>
+            </a>
+            <a href={`mailto:${COMPANY_EMAIL}`} className="flex items-center gap-3">
               <Mail className="w-5 h-5 text-secondary shrink-0" />
-              <span>contato@abncontabil.com.br</span>
-            </div>
+              <span>{COMPANY_EMAIL}</span>
+            </a>
           </div>
         </div>
 

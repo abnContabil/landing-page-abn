@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { TrendingDown, Users, ChevronRight } from 'lucide-react'
+import { WHATSAPP_URL } from '@/lib/constants'
 
 export function Hero() {
   return (
@@ -33,7 +34,7 @@ export function Hero() {
               asChild
               className="rounded-full bg-secondary text-primary hover:bg-secondary/90 font-semibold shadow-lg hover:shadow-xl transition-all"
             >
-              <a href="#contato">
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
                 Diagnóstico Gratuito
                 <ChevronRight className="ml-2 w-4 h-4" />
               </a>

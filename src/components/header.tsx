@@ -3,6 +3,7 @@ import { Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet'
 import { cn } from '@/lib/utils'
+import { WHATSAPP_URL } from '@/lib/constants'
 
 const NAV_LINKS = [
   { name: 'Serviços', href: '#servicos' },
@@ -31,7 +32,14 @@ export function Header() {
       )}
     >
       <div className="container mx-auto px-4 h-20 flex items-center justify-between">
-        <a href="#" className="flex items-center gap-2">
+        <a
+          href="/"
+          className="flex items-center gap-2"
+          onClick={(e) => {
+            e.preventDefault()
+            window.scrollTo(0, 0)
+          }}
+        >
           <img
             src="https://modern-connect-page.lovable.app/__l5e/assets-v1/553d6e9d-c6dd-4780-aa6e-7e0c8d8b09d6/abn-logo.jpg"
             alt="ABN Contábil Logo"
@@ -54,11 +62,7 @@ export function Header() {
 
         <div className="hidden md:flex">
           <Button asChild className="rounded-full bg-primary hover:bg-primary/90 text-white">
-            <a
-              href="https://api.whatsapp.com/send?phone=556135612665&text=Ol%C3%A1%2C%20quero%20fazer%20um%20diagn%C3%B3stico%20gratuito%20com%20a%20ABN%20Cont%C3%A1bil."
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
               Falar no WhatsApp
             </a>
           </Button>
@@ -87,7 +91,7 @@ export function Header() {
                 ))}
                 <Button asChild className="w-full rounded-full mt-4 bg-primary text-white">
                   <a
-                    href="https://api.whatsapp.com/send?phone=556135612665&text=Ol%C3%A1%2C%20quero%20fazer%20um%20diagn%C3%B3stico%20gratuito%20com%20a%20ABN%20Cont%C3%A1bil."
+                    href={WHATSAPP_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => setIsOpen(false)}
