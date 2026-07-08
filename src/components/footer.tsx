@@ -1,5 +1,12 @@
 import { Instagram, Linkedin, MapPin, Mail, Phone } from 'lucide-react'
-import { INSTAGRAM_URL, LINKEDIN_URL } from '@/lib/constants'
+import {
+  INSTAGRAM_URL,
+  LINKEDIN_URL,
+  WHATSAPP_URL,
+  COMPANY_EMAIL,
+  COMPANY_PHONE,
+  COMPANY_ADDRESS,
+} from '@/lib/constants'
 
 export function Footer() {
   return (
@@ -46,21 +53,36 @@ export function Footer() {
         <div>
           <h3 className="font-semibold text-lg mb-6 text-secondary">Contato</h3>
           <ul className="space-y-4 text-sm text-slate-300">
-            <li className="flex items-center gap-3">
-              <Phone className="w-4 h-4 text-secondary" />
-              <span>(61) 3561-2665</span>
+            <li>
+              <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 hover:text-white transition-colors"
+              >
+                <Phone className="w-4 h-4 text-secondary" />
+                <span>{COMPANY_PHONE}</span>
+              </a>
             </li>
-            <li className="flex items-center gap-3">
-              <Mail className="w-4 h-4 text-secondary" />
-              <span>contato@abncontabil.com.br</span>
+            <li>
+              <a
+                href={`mailto:${COMPANY_EMAIL}`}
+                className="flex items-center gap-3 hover:text-white transition-colors"
+              >
+                <Mail className="w-4 h-4 text-secondary" />
+                <span>{COMPANY_EMAIL}</span>
+              </a>
             </li>
-            <li className="flex items-start gap-3">
-              <MapPin className="w-4 h-4 text-secondary shrink-0 mt-1" />
-              <span>
-                C 11 Lote 3 a 5 Loja 4
-                <br />
-                Taguatinga DF - Cep: 72.010-110
-              </span>
+            <li>
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=ABN+Contabil+Taguatinga+DF"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-start gap-3 hover:text-white transition-colors"
+              >
+                <MapPin className="w-4 h-4 text-secondary shrink-0 mt-1" />
+                <span>{COMPANY_ADDRESS}</span>
+              </a>
             </li>
           </ul>
         </div>

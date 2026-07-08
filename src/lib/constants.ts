@@ -1,5 +1,5 @@
 export const WHATSAPP_URL =
-  'https://api.whatsapp.com/send?phone=556135612665&text=Ol%C3%A1%2C%20quero%20fazer%20um%20diagn%C3%B3stico%20gratuito%20com%20a%20ABN%20Cont%C3%A1bil.'
+  'https://wa.me/556135612665?text=Ol%C3%A1%2C%20quero%20fazer%20um%20diagn%C3%B3stico%20gratuito%20com%20a%20ABN%20Cont%C3%A1bil.'
 export const WHATSAPP_PHONE = '556135612665'
 export const INSTAGRAM_URL = 'https://www.instagram.com/abncontabil/'
 export const LINKEDIN_URL = 'https://www.linkedin.com/company/abn-contabil/'
@@ -17,5 +17,5 @@ export function buildWhatsAppMessage(data: {
   mensagem?: string
 }): string {
   const text = `Olá, meu nome é ${data.nome} da empresa ${data.empresa}. Gostaria de um diagnóstico. Faturamento: ${data.faturamento}, Regime: ${data.regime}.${data.mensagem ? ` Mensagem: ${data.mensagem}` : ''}`
-  return `https://api.whatsapp.com/send?phone=${WHATSAPP_PHONE}&text=${encodeURIComponent(text)}`
+  return `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(text)}`
 }
