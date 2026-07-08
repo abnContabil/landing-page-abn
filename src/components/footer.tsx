@@ -56,9 +56,9 @@ export function Footer() {
             <li className="flex items-start gap-3">
               <MapPin className="w-4 h-4 text-secondary shrink-0 mt-1" />
               <span>
-                SIA Trecho 3, Lotes 625/695
+                C 11 Lote 3 a 5 Loja 4
                 <br />
-                Brasília - DF
+                Taguatinga DF - Cep: 72.010-110
               </span>
             </li>
           </ul>
@@ -68,13 +68,17 @@ export function Footer() {
           <h3 className="font-semibold text-lg mb-6 text-secondary">Redes Sociais</h3>
           <div className="flex gap-4">
             <a
-              href="#"
+              href="https://instagram.com/abncontabil"
+              target="_blank"
+              rel="noopener noreferrer"
               className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-secondary hover:text-[#052B3A] transition-all"
             >
               <Instagram className="w-5 h-5" />
             </a>
             <a
-              href="#"
+              href="https://linkedin.com/company/abncontabil"
+              target="_blank"
+              rel="noopener noreferrer"
               className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-secondary hover:text-[#052B3A] transition-all"
             >
               <Linkedin className="w-5 h-5" />

@@ -54,7 +54,13 @@ export function Header() {
 
         <div className="hidden md:flex">
           <Button asChild className="rounded-full bg-primary hover:bg-primary/90 text-white">
-            <a href="#contato">Falar no WhatsApp</a>
+            <a
+              href="https://api.whatsapp.com/send?phone=556135612665&text=Ol%C3%A1%2C%20quero%20fazer%20um%20diagn%C3%B3stico%20gratuito%20com%20a%20ABN%20Cont%C3%A1bil."
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Falar no WhatsApp
+            </a>
           </Button>
         </div>
 
@@ -80,7 +86,12 @@ export function Header() {
                   </a>
                 ))}
                 <Button asChild className="w-full rounded-full mt-4 bg-primary text-white">
-                  <a href="#contato" onClick={() => setIsOpen(false)}>
+                  <a
+                    href="https://api.whatsapp.com/send?phone=556135612665&text=Ol%C3%A1%2C%20quero%20fazer%20um%20diagn%C3%B3stico%20gratuito%20com%20a%20ABN%20Cont%C3%A1bil."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setIsOpen(false)}
+                  >
                     Falar no WhatsApp
                   </a>
                 </Button>

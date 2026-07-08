@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { Loader2, Send } from 'lucide-react'
+import { Loader2, Send, MapPin, Phone, Mail } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -29,7 +29,7 @@ const formSchema = z.object({
   whatsapp: z.string().min(10, 'Digite um número de WhatsApp válido'),
   email: z.string().email('Digite um e-mail válido'),
   company: z.string().min(2, 'Nome da empresa é obrigatório'),
-  regime: z.string().min(1, 'Selecione o regime tributário'),
+  regime: z.string().min(1, 'Selecione o tipo de empresa/regime'),
   revenue: z.string().min(1, 'Selecione o faturamento'),
   message: z.string().optional(),
 })
@@ -62,7 +62,7 @@ export function Contact() {
         description: 'Você será redirecionado para o nosso WhatsApp.',
       })
 
-      const messageText = `Olá! Gostaria de um diagnóstico gratuito.%0A%0A*Nome:* ${values.name}%0A*Empresa:* ${values.company}%0A*Regime:* ${values.regime}%0A*Faturamento:* ${values.revenue}${values.message ? `%0A*Mensagem:* ${values.message}` : ''}`
+      const messageText = `Olá, quero fazer um diagnóstico gratuito com a ABN Contábil.%0A%0A*Nome:* ${values.name}%0A*Empresa:* ${values.company}%0A*Regime:* ${values.regime}%0A*Faturamento:* ${values.revenue}${values.message ? `%0A*Mensagem:* ${values.message}` : ''}`
       const waUrl = `https://api.whatsapp.com/send?phone=556135612665&text=${messageText}`
 
       setTimeout(() => {
@@ -106,6 +106,21 @@ export function Contact() {
                 <strong>3.</strong> Apresentamos um plano de ação claro para sua empresa.
               </li>
             </ul>
+          </div>
+
+          <div className="mt-6 space-y-3 text-sm text-slate-600">
+            <div className="flex items-start gap-3">
+              <MapPin className="w-5 h-5 text-secondary shrink-0 mt-0.5" />
+              <span>C 11 Lote 3 a 5 Loja 4 - Taguatinga DF - Cep: 72.010-110</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <Phone className="w-5 h-5 text-secondary shrink-0" />
+              <span>(61) 3561-2665</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <Mail className="w-5 h-5 text-secondary shrink-0" />
+              <span>contato@abncontabil.com.br</span>
+            </div>
           </div>
         </div>
 
@@ -178,7 +193,7 @@ export function Contact() {
                   name="regime"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Regime Tributário</FormLabel>
+                      <FormLabel>Tipo de empresa/regime</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
@@ -186,12 +201,14 @@ export function Contact() {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
+                          <SelectItem value="MEI">MEI</SelectItem>
                           <SelectItem value="Simples Nacional">Simples Nacional</SelectItem>
                           <SelectItem value="Lucro Presumido">Lucro Presumido</SelectItem>
                           <SelectItem value="Lucro Real">Lucro Real</SelectItem>
-                          <SelectItem value="Não sei / Não tenho CNPJ">
-                            Não sei / Não tenho CNPJ
+                          <SelectItem value="Ainda não tenho empresa">
+                            Ainda não tenho empresa
                           </SelectItem>
+                          <SelectItem value="Não sei informar">Não sei informar</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -203,7 +220,7 @@ export function Contact() {
                   name="revenue"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Faturamento Mensal</FormLabel>
+                      <FormLabel>Faturamento mensal aproximado</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
