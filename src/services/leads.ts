@@ -24,7 +24,7 @@ export async function insertLead(data: LeadData) {
     status: 'novo',
   }
 
-  const { data: result, error } = await supabase.from('site_leads').insert(lead).select().single()
+  const { error } = await supabase.from('site_leads').insert(lead)
 
-  return { data: result, error }
+  return { error }
 }
