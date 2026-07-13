@@ -20,7 +20,7 @@ export async function insertLead(data: LeadData) {
     regime: data.regime,
     faturamento_mensal: data.faturamento_mensal,
     mensagem: data.mensagem,
-    origem: 'landing_page',
+    origem: 'site_abn_contabil',
     status: 'novo',
   }
 
