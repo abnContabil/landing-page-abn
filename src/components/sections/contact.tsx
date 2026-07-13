@@ -227,7 +227,7 @@ export function Contact() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Tipo de empresa/regime</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} value={field.value}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Selecione..." />
@@ -254,7 +254,7 @@ export function Contact() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Faturamento mensal aproximado</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} value={field.value}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Selecione..." />
