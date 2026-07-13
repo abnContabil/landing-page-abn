@@ -24,7 +24,19 @@ export async function insertLead(data: LeadData) {
     status: 'novo',
   }
 
-  const { error } = await supabase.from('site_leads').insert(lead)
+  const { data: inserted, error } = await supabase
+    .from('site_leads')
+    .insert(lead)
+    .select('id')
+    .single()
+
+  return { data: inserted, error }
+}
+
+export async function sendLeadEmail(leadId: string) {
+  const { error } = await supabase.functions.invoke('send-site-lead-email', {
+    body: { lead_id: leadId },
+  })
 
   return { error }
 }

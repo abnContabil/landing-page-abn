@@ -1,5 +1,6 @@
 {
   "_versions": {
-    "admin-users": 1
+    "admin-users": 2,
+    "send-site-lead-email": 1
   }
 }

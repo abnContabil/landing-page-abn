@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useToast } from '@/hooks/use-toast'
-import { insertLead } from '@/services/leads'
+import { insertLead, sendLeadEmail } from '@/services/leads'
 import {
   WHATSAPP_URL,
   buildWhatsAppMessage,
@@ -63,7 +63,7 @@ export function Contact() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true)
     try {
-      const { error } = await insertLead({
+      const { data, error } = await insertLead({
         nome: values.name,
         whatsapp: values.whatsapp,
         email: values.email,
@@ -74,6 +74,13 @@ export function Contact() {
       })
 
       if (error) throw error
+
+      if (data?.id) {
+        const { error: emailError } = await sendLeadEmail(data.id)
+        if (emailError) {
+          console.error('Email notification failed:', emailError)
+        }
+      }
 
       toast({
         title: 'Solicitação enviada com sucesso!',
