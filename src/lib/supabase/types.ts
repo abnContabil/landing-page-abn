@@ -931,6 +931,9 @@ export type Database = {
         Row: {
           created_at: string
           email: string | null
+          email_notification_error: string | null
+          email_notification_sent: boolean
+          email_notification_sent_at: string | null
           empresa: string | null
           faturamento_mensal: string | null
           id: string
@@ -946,6 +949,9 @@ export type Database = {
         Insert: {
           created_at?: string
           email?: string | null
+          email_notification_error?: string | null
+          email_notification_sent?: boolean
+          email_notification_sent_at?: string | null
           empresa?: string | null
           faturamento_mensal?: string | null
           id?: string
@@ -961,6 +967,9 @@ export type Database = {
         Update: {
           created_at?: string
           email?: string | null
+          email_notification_error?: string | null
+          email_notification_sent?: boolean
+          email_notification_sent_at?: string | null
           empresa?: string | null
           faturamento_mensal?: string | null
           id?: string

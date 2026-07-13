@@ -75,11 +75,9 @@ export function Contact() {
 
       if (error) throw error
 
-      if (data?.id) {
-        const { error: emailError } = await sendLeadEmail(data.id)
-        if (emailError) {
-          console.error('Email notification failed:', emailError)
-        }
+      const { error: emailError } = await sendLeadEmail('')
+      if (emailError) {
+        console.error('Email notification failed:', emailError)
       }
 
       toast({
