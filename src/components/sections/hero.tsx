@@ -66,7 +66,7 @@ export function Hero() {
         >
           <div className="absolute inset-0 bg-primary/5 rounded-3xl translate-x-4 translate-y-4 -z-10" />
           <img
-            src="https://modern-connect-page.lovable.app/assets/hero-CIA0Wr3c.jpg"
+            src="https://img.usecurling.com/p/800/800?q=modern%20accounting%20office&dpr=2"
             alt="Escritório de Contabilidade Moderno"
             className="rounded-3xl shadow-2xl object-cover w-full h-auto aspect-[4/3] lg:aspect-square"
           />
