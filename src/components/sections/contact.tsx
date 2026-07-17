@@ -63,7 +63,7 @@ export function Contact() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true)
     try {
-      const { data, error } = await insertLead({
+      const { data: leadId, error } = await insertLead({
         nome: values.name,
         whatsapp: values.whatsapp,
         email: values.email,
@@ -73,11 +73,36 @@ export function Contact() {
         mensagem: values.message || null,
       })
 
-      if (error) throw error
+      if (error || !leadId) {
+        console.error('insertLead failed:', error)
+        throw error ?? new Error('Failed to register lead')
+      }
 
-      const { error: emailError } = await sendLeadEmail('')
+      console.log('Lead registered with lead_id:', leadId)
+
+      const { error: emailError } = await sendLeadEmail(leadId)
+
       if (emailError) {
-        console.error('Email notification failed:', emailError)
+        console.error('Email notification failed for lead_id:', leadId, emailError)
+        toast({
+          title: 'Solicitação registrada, mas o e-mail não foi enviado',
+          description: 'Entre em contato pelo WhatsApp enquanto verificamos o envio.',
+          variant: 'destructive',
+        })
+
+        const waUrl = buildWhatsAppMessage({
+          nome: values.name,
+          empresa: values.company,
+          faturamento: values.revenue,
+          regime: values.regime,
+          mensagem: values.message,
+        })
+
+        setTimeout(() => {
+          window.open(waUrl, '_blank', 'noopener,noreferrer')
+          form.reset()
+        }, 1500)
+        return
       }
 
       toast({

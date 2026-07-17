@@ -12,27 +12,38 @@ export type LeadData = {
 }
 
 export async function insertLead(data: LeadData) {
-  const lead: TablesInsert<'site_leads'> = {
-    nome: data.nome,
-    whatsapp: data.whatsapp,
-    email: data.email,
-    empresa: data.empresa,
-    regime: data.regime,
-    faturamento_mensal: data.faturamento_mensal,
-    mensagem: data.mensagem,
-    origem: 'site_abn_contabil',
-    status: 'novo',
+  const { data: leadId, error } = await supabase.rpc('abn_criar_site_lead', {
+    p_nome: data.nome,
+    p_whatsapp: data.whatsapp,
+    p_email: data.email,
+    p_empresa: data.empresa,
+    p_regime: data.regime,
+    p_faturamento_mensal: data.faturamento_mensal,
+    p_mensagem: data.mensagem,
+  })
+
+  if (error) {
+    console.error('insertLead RPC error:', error)
+    return { data: null, error }
   }
 
-  const { error } = await supabase.from('site_leads').insert(lead)
+  if (!leadId) {
+    const noIdError = new Error('RPC did not return a lead ID')
+    console.error('insertLead: no leadId returned')
+    return { data: null, error: noIdError }
+  }
 
-  return { data: null, error }
+  return { data: leadId as string, error: null }
 }
 
 export async function sendLeadEmail(leadId: string) {
-  const { error } = await supabase.functions.invoke('send-site-lead-email', {
+  const { data, error } = await supabase.functions.invoke('send-site-lead-email', {
     body: { lead_id: leadId },
   })
 
-  return { error }
+  if (error) {
+    console.error('sendLeadEmail error for lead_id:', leadId, error)
+  }
+
+  return { data, error }
 }

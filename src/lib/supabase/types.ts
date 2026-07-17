@@ -1166,6 +1166,18 @@ export type Database = {
       }
     }
     Functions: {
+      abn_criar_site_lead: {
+        Args: {
+          p_email?: string
+          p_empresa?: string
+          p_faturamento_mensal?: string
+          p_mensagem?: string
+          p_nome: string
+          p_regime?: string
+          p_whatsapp: string
+        }
+        Returns: string
+      }
       get_user_empresas: { Args: { p_uid: string }; Returns: string[] }
     }
     Enums: {
