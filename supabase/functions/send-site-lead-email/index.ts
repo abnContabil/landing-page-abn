@@ -50,7 +50,7 @@ Deno.serve(async (req: Request) => {
     const { lead_id } = body as { lead_id?: string }
 
     if (!lead_id) {
-      return new Response(JSON.stringify({ error: 'lead_id is required' }), {
+      return new Response(JSON.stringify({ success: false, error: 'lead_id is required' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       })
@@ -63,7 +63,7 @@ Deno.serve(async (req: Request) => {
       .single()
 
     if (fetchError || !lead) {
-      return new Response(JSON.stringify({ error: 'Lead not found' }), {
+      return new Response(JSON.stringify({ success: false, error: 'Lead not found' }), {
         status: 404,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       })
@@ -77,10 +77,18 @@ Deno.serve(async (req: Request) => {
         .update({ email_notification_error: errMsg })
         .eq('id', lead_id)
 
-      return new Response(JSON.stringify({ error: errMsg }), {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      })
+      return new Response(
+        JSON.stringify({
+          success: false,
+          warning:
+            'Lead registered, but email notification was skipped — RESEND_API_KEY is not configured.',
+          lead_id,
+        }),
+        {
+          status: 200,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        },
+      )
     }
 
     const emailBody = buildEmailBody(lead)
@@ -108,10 +116,18 @@ Deno.serve(async (req: Request) => {
         })
         .eq('id', lead_id)
 
-      return new Response(JSON.stringify({ error: 'Failed to send email', details: errText }), {
-        status: 502,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      })
+      return new Response(
+        JSON.stringify({
+          success: false,
+          warning: 'Lead registered, but email notification failed.',
+          details: errText,
+          lead_id,
+        }),
+        {
+          status: 200,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        },
+      )
     }
 
     await supabaseAdmin
@@ -128,9 +144,16 @@ Deno.serve(async (req: Request) => {
     })
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Unknown error'
-    return new Response(JSON.stringify({ error: message }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    })
+    return new Response(
+      JSON.stringify({
+        success: false,
+        warning: 'Lead registered, but an unexpected error occurred during email notification.',
+        error: message,
+      }),
+      {
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      },
+    )
   }
 })
