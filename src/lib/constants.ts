@@ -16,6 +16,6 @@ export function buildWhatsAppMessage(data: {
   regime: string
   mensagem?: string
 }): string {
-  const text = `Olá, meu nome é ${data.nome} da empresa ${data.empresa}. Gostaria de um diagnóstico. Faturamento: ${data.faturamento}, Regime: ${data.regime}.${data.mensagem ? ` Mensagem: ${data.mensagem}` : ''}`
+  const text = `Olá, meu nome é ${data.nome}, da empresa ${data.empresa}. Gostaria de um diagnóstico gratuito.${data.mensagem ? ` ${data.mensagem}` : ''}`
   return `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(text)}`
 }
