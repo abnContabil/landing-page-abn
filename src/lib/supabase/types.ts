@@ -1179,6 +1179,7 @@ export type Database = {
         Returns: string
       }
       get_user_empresas: { Args: { p_uid: string }; Returns: string[] }
+      site_usuario_admin_ativo: { Args: never; Returns: boolean }
     }
     Enums: {
       status_importacao_ofx: 'processada' | 'parcial' | 'erro'

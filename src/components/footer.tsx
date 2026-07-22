@@ -6,6 +6,7 @@ import {
   COMPANY_EMAIL,
   COMPANY_PHONE,
   COMPANY_ADDRESS,
+  GOOGLE_MAPS_URL,
 } from '@/lib/constants'
 
 export function Footer() {
@@ -75,7 +76,7 @@ export function Footer() {
             </li>
             <li>
               <a
-                href="https://www.google.com/maps/search/?api=1&query=ABN+Contabil+Taguatinga+DF"
+                href={GOOGLE_MAPS_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-start gap-3 hover:text-white transition-colors"

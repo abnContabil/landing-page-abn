@@ -1,6 +1,8 @@
-export const WHATSAPP_URL =
-  'https://wa.me/556135612665?text=Ol%C3%A1%2C%20quero%20fazer%20um%20diagn%C3%B3stico%20gratuito%20com%20a%20ABN%20Cont%C3%A1bil.'
 export const WHATSAPP_PHONE = '556135612665'
+
+const WHATSAPP_DEFAULT_MESSAGE = 'Olá, quero fazer um diagnóstico gratuito com a ABN Contábil.'
+
+export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(WHATSAPP_DEFAULT_MESSAGE)}`
 export const INSTAGRAM_URL = 'https://www.instagram.com/abncontabil/'
 export const LINKEDIN_URL = 'https://www.linkedin.com/company/abn-contabil/'
 export const COMPANY_EMAIL = 'contato@abncontabil.com.br'
