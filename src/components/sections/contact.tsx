@@ -96,16 +96,8 @@ export function Contact() {
           mensagem: values.message,
         })
 
-        setTimeout(() => {
-          const a = document.createElement('a')
-          a.href = waUrl
-          a.target = '_blank'
-          a.rel = 'noopener noreferrer'
-          document.body.appendChild(a)
-          a.click()
-          document.body.removeChild(a)
-          form.reset()
-        }, 1500)
+        form.reset()
+        window.location.assign(waUrl)
         return
       }
 
@@ -120,16 +112,8 @@ export function Contact() {
         mensagem: values.message,
       })
 
-      setTimeout(() => {
-        const a = document.createElement('a')
-        a.href = waUrl
-        a.target = '_blank'
-        a.rel = 'noopener noreferrer'
-        document.body.appendChild(a)
-        a.click()
-        document.body.removeChild(a)
-        form.reset()
-      }, 1500)
+      form.reset()
+      window.location.assign(waUrl)
     } catch {
       toast({
         title: 'Erro ao enviar',
