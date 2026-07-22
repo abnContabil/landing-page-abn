@@ -93,13 +93,17 @@ export function Contact() {
         const waUrl = buildWhatsAppMessage({
           nome: values.name,
           empresa: values.company,
-          faturamento: values.revenue,
-          regime: values.regime,
           mensagem: values.message,
         })
 
         setTimeout(() => {
-          window.open(waUrl, '_blank', 'noopener,noreferrer')
+          const a = document.createElement('a')
+          a.href = waUrl
+          a.target = '_blank'
+          a.rel = 'noopener noreferrer'
+          document.body.appendChild(a)
+          a.click()
+          document.body.removeChild(a)
           form.reset()
         }, 1500)
         return
@@ -113,13 +117,17 @@ export function Contact() {
       const waUrl = buildWhatsAppMessage({
         nome: values.name,
         empresa: values.company,
-        faturamento: values.revenue,
-        regime: values.regime,
         mensagem: values.message,
       })
 
       setTimeout(() => {
-        window.open(waUrl, '_blank', 'noopener,noreferrer')
+        const a = document.createElement('a')
+        a.href = waUrl
+        a.target = '_blank'
+        a.rel = 'noopener noreferrer'
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
         form.reset()
       }, 1500)
     } catch {
