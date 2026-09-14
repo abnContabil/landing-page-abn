@@ -1,3 +1,7 @@
+# Environment variables
+.env
+.env.*
+
 # Logs
 logs
 *.log
@@ -41,10 +45,6 @@ dev-dist-ssr
 screenshot.png
 .eslintcache
 .oxlintcache
-
-# Environment variables
-.env*
-!.env
 
 # Linux kernel core dumps (e.g. when oxfmt or pnpm crash)
 core.[0-9]*
