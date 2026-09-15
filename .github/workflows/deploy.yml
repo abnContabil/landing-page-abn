@@ -1,0 +1,137 @@
+# ============================================================
+# Workflow: Build & Deploy para KingHost via Git Webhook
+#
+# Fluxo:
+#   push em main → GitHub Actions builda o projeto (pnpm)
+#   → commita o dist/ na branch "deploy"
+#   → KingHost (Git Webhook) faz pull da branch "deploy"
+#   → arquivos compilados chegam em www/ e o site entra no ar
+#
+# Não utiliza FTP. Todo o transporte é via HTTPS (Git).
+# ============================================================
+
+name: 🚀 Build & Deploy (Git Webhook)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # permite disparo manual pela aba Actions
+
+# Permissão para o GITHUB_TOKEN embutido fazer push na branch deploy
+permissions:
+  contents: write
+
+# Evita deploys concorrentes — um novo push aguarda o deploy atual terminar
+concurrency:
+  group: deploy-git-webhook
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    name: Build e Push para branch deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      # ------------------------------------------------------
+      # 1. Baixar o código-fonte da branch main
+      # ------------------------------------------------------
+      - name: 📥 Checkout do código
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # histórico completo para permitir troca de branch
+
+      # ------------------------------------------------------
+      # 2. Configurar Node.js 20
+      # ------------------------------------------------------
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # ------------------------------------------------------
+      # 3. Instalar pnpm 9 (padrão do projeto)
+      # ------------------------------------------------------
+      - name: 📦 Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      # ------------------------------------------------------
+      # 4. Instalar dependências respeitando o pnpm-lock.yaml
+      #    --frozen-lockfile falha se o lock estiver desatualizado
+      # ------------------------------------------------------
+      - name: 📥 Instalar dependências
+        run: pnpm install --frozen-lockfile
+
+      # ------------------------------------------------------
+      # 5. Criar .env temporário para o build
+      #    As variáveis VITE_* são injetadas pelo Vite no bundle.
+      #    Este arquivo existe apenas no runner e NUNCA volta
+      #    para o repositório.
+      # ------------------------------------------------------
+      - name: 🔧 Criar .env para build
+        run: |
+          echo "VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}" > .env
+          echo "VITE_SUPABASE_PUBLISHABLE_KEY=${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}" >> .env
+
+      # ------------------------------------------------------
+      # 6. Build de produção (gera a pasta dist/)
+      # ------------------------------------------------------
+      - name: 🔨 Build de produção
+        run: pnpm build
+
+      # ------------------------------------------------------
+      # 7. Remover source maps (não devem ir para produção)
+      # ------------------------------------------------------
+      - name: 🧹 Remover source maps
+        run: rm -f dist/assets/*.map
+
+      # ------------------------------------------------------
+      # 8. Preparar os arquivos compilados para a branch deploy
+      #    - Copia dist/ para uma pasta temporária limpa
+      #    - Inicializa um repositório Git isolado nela
+      #    - Faz commit de todos os arquivos compilados
+      # ------------------------------------------------------
+      - name: 📦 Preparar arquivos para branch deploy
+        run: |
+          mkdir -p deploy-output
+          cp -r dist/* deploy-output/
+
+          # README explicativo na branch deploy
+          cat > deploy-output/README.md << 'EOF'
+          # Branch de Deploy — Gerada automaticamente
+
+          Esta branch contém apenas os arquivos compilados do build de produção.
+          NÃO editar manualmente. Todo o código-fonte está na branch main.
+
+          Gerado pelo GitHub Actions a partir do commit: ${{ github.sha }}
+          EOF
+
+          cd deploy-output
+          git init
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "deploy: build from ${{ github.sha }}"
+
+      # ------------------------------------------------------
+      # 9. Push forçado para a branch deploy usando o
+      #    GITHUB_TOKEN embutido (não requer PAT — o token é
+      #    gerado automaticamente por execução e já tem acesso
+      #    ao próprio repositório, com permissão de contents:write
+      #    declarada no topo deste workflow)
+      # ------------------------------------------------------
+      - name: 📤 Push para branch deploy
+        run: |
+          cd deploy-output
+          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          git push --force origin HEAD:deploy
+
+      # ------------------------------------------------------
+      # 10. Confirmar conclusão
+      # ------------------------------------------------------
+      - name: ✅ Build e push concluídos
+        run: |
+          echo "Build compilado e enviado para a branch deploy."
+          echo "A KingHost fará o pull automático via Git Webhook."
+          echo "Commit de origem: ${{ github.sha }}"
