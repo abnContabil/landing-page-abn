@@ -95,6 +95,8 @@ jobs:
       - name: 📦 Preparar arquivos para branch deploy
         run: |
           mkdir -p deploy-output
+          # dotglob faz o glob incluir arquivos ocultos (.htaccess etc.)
+          shopt -s dotglob
           cp -r dist/* deploy-output/
 
           # README explicativo na branch deploy
