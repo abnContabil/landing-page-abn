@@ -49,12 +49,13 @@ jobs:
           node-version: 20
 
       # ------------------------------------------------------
-      # 3. Instalar pnpm 9 (padrão do projeto)
+      # 3. Instalar pnpm 10 (versão usada pelo projeto —
+      #    o pnpm-workspace.yaml do projeto exige pnpm 10)
       # ------------------------------------------------------
       - name: 📦 Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9
+          version: 10
 
       # ------------------------------------------------------
       # 4. Instalar dependências respeitando o pnpm-lock.yaml
