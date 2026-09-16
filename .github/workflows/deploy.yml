@@ -41,7 +41,16 @@ jobs:
           fetch-depth: 0 # histórico completo para permitir troca de branch
 
       # ------------------------------------------------------
-      # 2. Configurar Node.js 20
+      # 2. Instalar pnpm 10 antes do cache do Node.js
+      # ------------------------------------------------------
+      - name: 📦 Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      # ------------------------------------------------------
+      # 3. Configurar Node.js 20 com cache do pnpm
+      #    O pnpm precisa estar no PATH antes deste step.
       # ------------------------------------------------------
       - name: 📦 Setup Node.js
         uses: actions/setup-node@v4
@@ -51,23 +60,23 @@ jobs:
           cache-dependency-path: pnpm-lock.yaml
 
       # ------------------------------------------------------
-      # 3. Instalar pnpm 10 (versão usada pelo projeto —
+      # 4. Confirmar pnpm 10 (versão usada pelo projeto —
       #    o pnpm-workspace.yaml do projeto exige pnpm 10)
       # ------------------------------------------------------
-      - name: 📦 Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
+      - name: 🔎 Verificar versões
+        run: |
+          node --version
+          pnpm --version
 
       # ------------------------------------------------------
-      # 4. Instalar dependências respeitando o pnpm-lock.yaml
+      # 5. Instalar dependências respeitando o pnpm-lock.yaml
       #    --frozen-lockfile falha se o lock estiver desatualizado
       # ------------------------------------------------------
       - name: 📥 Instalar dependências
         run: pnpm install --frozen-lockfile
 
       # ------------------------------------------------------
-      # 5. Build de produção (gera a pasta dist/)
+      # 6. Build de produção (gera a pasta dist/)
       # ------------------------------------------------------
       - name: 🔨 Build de produção
         run: pnpm build
@@ -76,7 +85,7 @@ jobs:
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
 
       # ------------------------------------------------------
-      # 6. Validar o artefato antes de publicar
+      # 7. Validar o artefato antes de publicar
       # ------------------------------------------------------
       - name: 🔍 Validar arquivos da build
         shell: bash
@@ -86,13 +95,13 @@ jobs:
           test -n "$(find dist/assets -type f -print -quit)" || { echo "dist/assets está vazio"; exit 1; }
 
       # ------------------------------------------------------
-      # 7. Remover source maps (não devem ir para produção)
+      # 8. Remover source maps (não devem ir para produção)
       # ------------------------------------------------------
       - name: 🧹 Remover source maps
         run: rm -f dist/assets/*.map
 
       # ------------------------------------------------------
-      # 8. Configurar identidade do Git no runner
+      # 9. Configurar identidade do Git no runner
       # ------------------------------------------------------
       - name: ⚙️ Configurar Git
         run: |
@@ -100,7 +109,7 @@ jobs:
           git config --global user.email "actions@github.com"
 
       # ------------------------------------------------------
-      # 9. Preparar os arquivos compilados para a branch deploy
+      # 10. Preparar os arquivos compilados para a branch deploy
       #    - Copia dist/ para uma pasta temporária limpa
       #    - Inicializa um repositório Git isolado nela
       #    - Faz commit de todos os arquivos compilados
@@ -128,7 +137,7 @@ jobs:
           git commit -m "deploy: build from ${{ github.sha }}"
 
       # ------------------------------------------------------
-          # 10. Push forçado para a branch deploy usando o
+          # 11. Push forçado para a branch deploy usando o
       #    GITHUB_TOKEN embutido (não requer PAT — o token é
       #    gerado automaticamente por execução e já tem acesso
       #    ao próprio repositório, com permissão de contents:write
@@ -141,7 +150,7 @@ jobs:
           git push --force origin HEAD:deploy
 
       # ------------------------------------------------------
-      # 11. Confirmar conclusão
+      # 12. Confirmar conclusão
       # ------------------------------------------------------
       - name: ✅ Build e push concluídos
         run: |
